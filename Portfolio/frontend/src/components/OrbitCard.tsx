@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.panel,
+    overflow: "hidden",
     transform: [{ translateY: 0 }]
   },
   compactCard: {

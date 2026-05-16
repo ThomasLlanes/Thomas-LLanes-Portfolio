@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Platform, SafeAreaView, ScrollView, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { navCards, type NavSection } from "./src/content/portfolio";
 import { OrbitCard } from "./src/components/OrbitCard";
@@ -10,22 +10,61 @@ import { colors } from "./src/styles/theme";
 export default function App() {
   const [orbOpen, setOrbOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<NavSection>("about");
+  const [scrollRequest, setScrollRequest] = useState(0);
+  const scrollViewRef = useRef<ScrollView>(null);
+  const sectionPanelY = useRef<number | null>(null);
   const { width } = useWindowDimensions();
   const compact = width < 820;
+
+  const scrollToSectionPanel = () => {
+    if (sectionPanelY.current === null) {
+      return;
+    }
+
+    const y = Math.max(sectionPanelY.current - (compact ? 10 : 18), 0);
+
+    scrollViewRef.current?.scrollTo({ y, animated: true });
+
+    if (Platform.OS === "web" && typeof window !== "undefined" && typeof window.scrollTo === "function") {
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
 
   const selectSection = (section: NavSection) => {
     setOrbOpen(true);
     setActiveSection(section);
+    setScrollRequest((request) => request + 1);
   };
 
   const toggleOrb = () => {
     setOrbOpen((isOpen) => !isOpen);
   };
 
+  useEffect(() => {
+    if (!orbOpen || scrollRequest === 0) {
+      return;
+    }
+
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+    const frame = requestAnimationFrame(() => {
+      scrollToSectionPanel();
+      timeoutId = setTimeout(scrollToSectionPanel, 140);
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [compact, orbOpen, scrollRequest]);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar style="light" />
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView ref={scrollViewRef} contentContainerStyle={[styles.scrollContent, compact && styles.scrollContentCompact]}>
         <View style={[styles.experience, compact && styles.experienceCompact]}>
           <View style={styles.identityStrip}>
             <Text style={styles.identityName}>Thomas Llanes</Text>
@@ -66,7 +105,13 @@ export default function App() {
           )}
         </View>
 
-        {orbOpen && <SectionPanel activeSection={activeSection} />}
+        {orbOpen && (
+          <View onLayout={(event) => {
+            sectionPanelY.current = event.nativeEvent.layout.y;
+          }}>
+            <SectionPanel activeSection={activeSection} compact={compact} />
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -82,6 +127,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 40,
     backgroundColor: colors.backgroundDeep
+  },
+  scrollContentCompact: {
+    paddingHorizontal: 12
   },
   experience: {
     minHeight: 720,
