@@ -22,16 +22,15 @@ export const projects: ProjectDto[] = [
     media: [
       {
         type: "video",
-        url: "https://hosted-video-url-placeholder.com/pokemon-ios-demo",
-        altText: "Video demo placeholder for the Pokemon iOS App",
-        placeholder: true
+        url: "/media/PokeBrowser_Portfolio_Voiceover.mp4",
+        altText: "PokeBrowser iOS app video demo",
+        placeholder: false
       }
     ],
     links: [
       { label: "GitHub", url: "https://github.com/your-github-placeholder/pokemon-ios-app", placeholder: true },
-      { label: "Hosted Video", url: "https://hosted-video-url-placeholder.com/pokemon-ios-demo", placeholder: true }
+      { label: "Hosted Video", url: "/media/PokeBrowser_Portfolio_Voiceover.mp4" }
     ],
     featured: true
   }
 ];
-

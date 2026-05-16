@@ -8,6 +8,37 @@ type SectionPanelProps = {
   activeSection: NavSection;
 };
 
+function ProjectVideo({ altText, url }: { altText: string; url: string }) {
+  if (Platform.OS === "web") {
+    return (
+      <View style={styles.videoFrame} accessibilityLabel={altText}>
+        {React.createElement("video", {
+          controls: true,
+          playsInline: true,
+          preload: "metadata",
+          src: url,
+          style: {
+            backgroundColor: "#020814",
+            border: 0,
+            borderRadius: 8,
+            display: "block",
+            height: "100%",
+            objectFit: "cover",
+            width: "100%",
+          },
+        })}
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.videoFallback} accessibilityLabel={altText}>
+      <Text style={styles.videoLabel}>Video demo</Text>
+      <Text style={styles.videoUrl}>{url}</Text>
+    </View>
+  );
+}
+
 function LinkButton({ link }: { link: ContactLink }) {
   const openLink = () => {
     if (Platform.OS === "web" && link.downloadFilename) {
@@ -101,10 +132,7 @@ function ProjectsSection() {
       <Text style={styles.kicker}>Projects</Text>
       {projects.map((project) => (
         <View key={project.slug} style={styles.projectLayout}>
-          <View style={styles.videoPlaceholder} accessibilityLabel={project.media.altText}>
-            <Text style={styles.videoLabel}>Video demo placeholder</Text>
-            <Text style={styles.videoUrl}>{project.media.url}</Text>
-          </View>
+          <ProjectVideo altText={project.media.altText} url={project.media.url} />
           <View style={styles.projectCopy}>
             <Text style={styles.projectTitle}>{project.title}</Text>
             <Text style={styles.paragraph}>{project.longDescription}</Text>
@@ -329,7 +357,17 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 24
   },
-  videoPlaceholder: {
+  videoFrame: {
+    flexGrow: 1,
+    flexBasis: 340,
+    minHeight: 260,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.borderStrong,
+    overflow: "hidden",
+    backgroundColor: "rgba(7, 24, 43, 0.92)"
+  },
+  videoFallback: {
     flexGrow: 1,
     flexBasis: 340,
     minHeight: 260,

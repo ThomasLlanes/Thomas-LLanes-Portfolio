@@ -130,20 +130,18 @@ export const projects: Project[] = [
     ],
     media: {
       type: "video",
-      url: "https://hosted-video-url-placeholder.com/pokemon-ios-demo",
-      altText: "Video demo placeholder for PokeBrowser",
-      placeholder: true,
+      url: "/media/PokeBrowser_Portfolio_Voiceover.mp4",
+      altText: "PokeBrowser iOS app video demo",
+      placeholder: false,
     },
     links: [
       {
         label: "GitHub",
-        url: "https://github.com/your-github-placeholder/pokemon-ios-app",
-        placeholder: true,
+        url: "https://github.com/ThomasLlanes/PokeBrowserIOSApp",
       },
       {
         label: "Video",
-        url: "https://hosted-video-url-placeholder.com/pokemon-ios-demo",
-        placeholder: true,
+        url: "/media/PokeBrowser_Portfolio_Voiceover.mp4",
       },
     ],
     featured: true,
