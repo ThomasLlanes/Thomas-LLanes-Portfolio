@@ -45,12 +45,20 @@ export default function App() {
       return;
     }
 
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
     const frame = requestAnimationFrame(() => {
       scrollToSectionPanel();
-      setTimeout(scrollToSectionPanel, 140);
+      timeoutId = setTimeout(scrollToSectionPanel, 140);
     });
 
-    return () => cancelAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(frame);
+
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [compact, orbOpen, scrollRequest]);
 
   return (
