@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View, type ViewStyle } from "react-native";
 import { ChevronRight } from "lucide-react-native";
 import { colors } from "../styles/theme";
 import type { NavSection } from "../content/portfolio";
@@ -10,18 +10,17 @@ type OrbitCardProps = {
   description: string;
   section: NavSection;
   selected: boolean;
-  index: number;
   compact: boolean;
   onPress: (section: NavSection) => void;
 };
 
-const desktopPositions = [
-  { top: "12%", left: "8%" },
-  { top: "16%", right: "8%" },
-  { bottom: 0, left: "50%", marginLeft: -160 }
-] as const;
+const desktopPositions: Record<NavSection, ViewStyle> = {
+  about: { top: "12%", left: "8%" },
+  projects: { top: "16%", right: "8%" },
+  notes: { bottom: 0, left: "50%", marginLeft: -160 }
+};
 
-export function OrbitCard({ title, eyebrow, description, section, selected, index, compact, onPress }: OrbitCardProps) {
+export function OrbitCard({ title, eyebrow, description, section, selected, compact, onPress }: OrbitCardProps) {
   return (
     <Pressable
       onPress={() => onPress(section)}
@@ -30,7 +29,7 @@ export function OrbitCard({ title, eyebrow, description, section, selected, inde
       accessibilityLabel={`Open ${title}`}
       style={({ pressed }) => [
         styles.card,
-        compact ? styles.compactCard : desktopPositions[index],
+        compact ? styles.compactCard : desktopPositions[section],
         selected && styles.selected,
         pressed && styles.hot
       ]}

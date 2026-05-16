@@ -50,7 +50,7 @@ export default function App() {
 
           {orbOpen && (
             <View pointerEvents="box-none" style={[styles.cardsLayer, compact && styles.cardsLayerCompact]}>
-              {navCards.map((card, index) => (
+              {navCards.map((card) => (
                 <OrbitCard
                   key={card.key}
                   title={card.title}
@@ -58,7 +58,6 @@ export default function App() {
                   description={card.description}
                   section={card.key}
                   selected={activeSection === card.key}
-                  index={index}
                   compact={compact}
                   onPress={selectSection}
                 />
