@@ -6,6 +6,7 @@ import { colors } from "../styles/theme";
 
 type SectionPanelProps = {
   activeSection: NavSection;
+  compact: boolean;
 };
 
 function ProjectVideo({ altText, url }: { altText: string; url: string }) {
@@ -74,13 +75,13 @@ function Chip({ label }: { label: string }) {
   );
 }
 
-function AboutSection() {
+function AboutSection({ compact }: { compact: boolean }) {
   return (
-    <View style={styles.sectionGrid}>
-      <View style={styles.primaryColumn}>
+    <View style={[styles.sectionGrid, compact && styles.sectionGridCompact]}>
+      <View style={[styles.primaryColumn, styles.contentCard, compact && styles.mobileColumn]}>
         <Text style={styles.kicker}>About / Contact</Text>
-        <Text style={styles.name}>{profile.name}</Text>
-        <Text style={styles.role}>{profile.role}</Text>
+        <Text style={[styles.name, compact && styles.nameCompact]}>{profile.name}</Text>
+        <Text style={[styles.role, compact && styles.roleCompact]}>{profile.role}</Text>
         <Text style={styles.paragraph}>{profile.summary}</Text>
         <View style={styles.metaRow}>
           <MapPin size={16} color={colors.cyan} />
@@ -97,26 +98,34 @@ function AboutSection() {
         </View>
       </View>
 
-      <View style={styles.secondaryColumn}>
-        <Text style={styles.blockTitle}>Current Focus</Text>
-        <Text style={styles.paragraph}>{profile.currentWork}</Text>
-        <Text style={styles.blockTitle}>Education</Text>
-        <Text style={styles.paragraph}>{profile.education}</Text>
-        <Text style={styles.blockTitle}>Previous Experience</Text>
-        <Text style={styles.paragraph}>{profile.previousExperience}</Text>
-        <Text style={styles.blockTitle}>Languages</Text>
-        <View style={styles.chipWrap}>
-          {profile.languages.map((language) => (
-            <Chip key={language} label={language} />
-          ))}
+      <View style={[styles.secondaryColumn, styles.miniCardGrid, compact && styles.mobileColumn]}>
+        <View style={styles.contentCard}>
+          <Text style={styles.blockTitle}>Current Focus</Text>
+          <Text style={styles.paragraph}>{profile.currentWork}</Text>
+        </View>
+        <View style={styles.contentCard}>
+          <Text style={styles.blockTitle}>Education</Text>
+          <Text style={styles.paragraph}>{profile.education}</Text>
+        </View>
+        <View style={styles.contentCard}>
+          <Text style={styles.blockTitle}>Previous Experience</Text>
+          <Text style={styles.paragraph}>{profile.previousExperience}</Text>
+        </View>
+        <View style={styles.contentCard}>
+          <Text style={styles.blockTitle}>Languages</Text>
+          <View style={styles.chipWrap}>
+            {profile.languages.map((language) => (
+              <Chip key={language} label={language} />
+            ))}
+          </View>
         </View>
       </View>
 
       <View style={styles.fullWidth}>
-        <Text style={styles.blockTitle}>Technical Strengths</Text>
-        <View style={styles.strengthGrid}>
+        <Text style={[styles.blockTitle, styles.sectionBlockTitle]}>Technical Strengths</Text>
+        <View style={[styles.strengthGrid, compact && styles.mobileStack]}>
           {profile.strengths.map((strength) => (
-            <View key={strength} style={styles.strengthItem}>
+            <View key={strength} style={[styles.strengthItem, compact && styles.mobileFullWidth]}>
               <Text style={styles.strengthText}>{strength}</Text>
             </View>
           ))}
@@ -126,34 +135,47 @@ function AboutSection() {
   );
 }
 
-function ProjectsSection() {
+function ProjectsSection({ compact }: { compact: boolean }) {
   return (
     <View>
       <Text style={styles.kicker}>Projects</Text>
       {projects.map((project) => (
-        <View key={project.slug} style={styles.projectLayout}>
-          <ProjectVideo altText={project.media.altText} url={project.media.url} />
-          <View style={styles.projectCopy}>
-            <Text style={styles.projectTitle}>{project.title}</Text>
-            <Text style={styles.paragraph}>{project.longDescription}</Text>
-            <Text style={styles.blockTitle}>Key Features</Text>
-            {project.keyFeatures.map((feature) => (
-              <Text key={feature} style={styles.bullet}>- {feature}</Text>
-            ))}
-            <Text style={styles.blockTitle}>Technologies</Text>
-            <View style={styles.chipWrap}>
-              {project.technologies.map((technology) => (
-                <Chip key={technology} label={technology} />
+        <View key={project.slug} style={[styles.projectLayout, compact && styles.sectionGridCompact]}>
+          <View style={[styles.projectMediaColumn, compact && styles.mobileFullWidth]}>
+            <ProjectVideo altText={project.media.altText} url={project.media.url} />
+          </View>
+          <View style={[styles.projectCopy, styles.miniCardGrid, compact && styles.mobileColumn]}>
+            <View style={styles.contentCard}>
+              <Text style={[styles.projectTitle, compact && styles.projectTitleCompact]}>{project.title}</Text>
+              <Text style={styles.paragraph}>{project.longDescription}</Text>
+            </View>
+            <View style={styles.contentCard}>
+              <Text style={styles.blockTitle}>Key Features</Text>
+              {project.keyFeatures.map((feature) => (
+                <Text key={feature} style={styles.bullet}>- {feature}</Text>
               ))}
             </View>
-            <Text style={styles.blockTitle}>Architecture Notes</Text>
-            {project.architectureNotes.map((note) => (
-              <Text key={note} style={styles.bullet}>- {note}</Text>
-            ))}
-            <View style={styles.linksGrid}>
-              {project.links.map((link) => (
-                <LinkButton key={link.label} link={link} />
+            <View style={styles.contentCard}>
+              <Text style={styles.blockTitle}>Technologies</Text>
+              <View style={styles.chipWrap}>
+                {project.technologies.map((technology) => (
+                  <Chip key={technology} label={technology} />
+                ))}
+              </View>
+            </View>
+            <View style={styles.contentCard}>
+              <Text style={styles.blockTitle}>Architecture Notes</Text>
+              {project.architectureNotes.map((note) => (
+                <Text key={note} style={styles.bullet}>- {note}</Text>
               ))}
+            </View>
+            <View style={styles.contentCard}>
+              <Text style={styles.blockTitle}>Links</Text>
+              <View style={styles.linksGrid}>
+                {project.links.map((link) => (
+                  <LinkButton key={link.label} link={link} />
+                ))}
+              </View>
             </View>
           </View>
         </View>
@@ -162,16 +184,18 @@ function ProjectsSection() {
   );
 }
 
-function NotesSection() {
+function NotesSection({ compact }: { compact: boolean }) {
   return (
     <View>
       <Text style={styles.kicker}>Engineering Notes</Text>
-      <Text style={styles.sectionIntro}>
-        Case-study placeholders that show how Thomas thinks through product behavior, system boundaries, and correctness without exposing proprietary work.
-      </Text>
-      <View style={styles.notesGrid}>
+      <View style={styles.contentCard}>
+        <Text style={styles.sectionIntro}>
+          Case-study placeholders that show how Thomas thinks through product behavior, system boundaries, and correctness without exposing proprietary work.
+        </Text>
+      </View>
+      <View style={[styles.notesGrid, compact && styles.mobileStack]}>
         {engineeringNotes.map((note) => (
-          <View key={note.slug} style={styles.noteCard}>
+          <View key={note.slug} style={[styles.noteCard, compact && styles.mobileFullWidth]}>
             <View style={styles.noteHeader}>
               <Text style={styles.noteTheme}>{note.theme}</Text>
               <Text style={styles.noteTitle}>{note.title}</Text>
@@ -201,12 +225,12 @@ function NotesSection() {
   );
 }
 
-export function SectionPanel({ activeSection }: SectionPanelProps) {
+export function SectionPanel({ activeSection, compact }: SectionPanelProps) {
   return (
-    <View style={styles.panel}>
-      {activeSection === "about" && <AboutSection />}
-      {activeSection === "projects" && <ProjectsSection />}
-      {activeSection === "notes" && <NotesSection />}
+    <View style={[styles.panel, compact && styles.panelCompact]}>
+      {activeSection === "about" && <AboutSection compact={compact} />}
+      {activeSection === "projects" && <ProjectsSection compact={compact} />}
+      {activeSection === "notes" && <NotesSection compact={compact} />}
     </View>
   );
 }
@@ -216,27 +240,47 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 1180,
     alignSelf: "center",
-    padding: 24,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 8,
-    backgroundColor: "rgba(3, 13, 26, 0.72)"
+    padding: 0
+  },
+  panelCompact: {
+    overflow: "visible"
   },
   sectionGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 24
   },
+  sectionGridCompact: {
+    gap: 16
+  },
   primaryColumn: {
     flexGrow: 1,
-    flexBasis: 460
+    flexBasis: 460,
+    minWidth: 0
   },
   secondaryColumn: {
     flexGrow: 1,
-    flexBasis: 340
+    flexBasis: 340,
+    minWidth: 0
+  },
+  mobileColumn: {
+    width: "100%",
+    flexGrow: 0,
+    flexShrink: 1
   },
   fullWidth: {
     width: "100%"
+  },
+  contentCard: {
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 16,
+    backgroundColor: "rgba(8, 35, 62, 0.62)",
+    minWidth: 0
+  },
+  miniCardGrid: {
+    gap: 12
   },
   kicker: {
     color: colors.cyan,
@@ -253,12 +297,20 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     marginBottom: 12
   },
+  nameCompact: {
+    fontSize: 34,
+    lineHeight: 40
+  },
   role: {
     color: colors.textSoft,
     fontSize: 22,
     lineHeight: 30,
     fontWeight: "700",
     marginBottom: 16
+  },
+  roleCompact: {
+    fontSize: 19,
+    lineHeight: 26
   },
   paragraph: {
     color: colors.textMuted,
@@ -274,7 +326,8 @@ const styles = StyleSheet.create({
   },
   metaText: {
     color: colors.textSoft,
-    fontSize: 15
+    fontSize: 15,
+    flexShrink: 1
   },
   linksGrid: {
     flexDirection: "row",
@@ -290,7 +343,10 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     gap: 8,
+    maxWidth: "100%",
+    flexGrow: 1,
     backgroundColor: "rgba(15, 48, 82, 0.58)"
   },
   linkButtonHot: {
@@ -300,7 +356,8 @@ const styles = StyleSheet.create({
   linkText: {
     color: colors.text,
     fontSize: 14,
-    fontWeight: "800"
+    fontWeight: "800",
+    flexShrink: 1
   },
   placeholder: {
     color: colors.cyan,
@@ -311,8 +368,10 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: 16,
     fontWeight: "800",
-    marginTop: 8,
     marginBottom: 8
+  },
+  sectionBlockTitle: {
+    marginTop: 4
   },
   chipWrap: {
     flexDirection: "row",
@@ -326,12 +385,14 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     paddingHorizontal: 10,
     paddingVertical: 7,
+    maxWidth: "100%",
     backgroundColor: "rgba(21, 62, 98, 0.54)"
   },
   chipText: {
     color: colors.textSoft,
     fontSize: 12,
-    fontWeight: "700"
+    fontWeight: "700",
+    flexShrink: 1
   },
   strengthGrid: {
     flexDirection: "row",
@@ -345,7 +406,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     padding: 14,
-    backgroundColor: "rgba(8, 35, 62, 0.62)"
+    backgroundColor: "rgba(8, 35, 62, 0.62)",
+    minWidth: 0
+  },
+  mobileStack: {
+    flexDirection: "column",
+    flexWrap: "nowrap"
+  },
+  mobileFullWidth: {
+    width: "100%",
+    maxWidth: "100%",
+    minWidth: 0,
+    flexBasis: "auto",
+    flexGrow: 0,
+    flexShrink: 1
   },
   strengthText: {
     color: colors.textSoft,
@@ -355,12 +429,17 @@ const styles = StyleSheet.create({
   projectLayout: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 24
+    gap: 24,
+    marginBottom: 8
   },
-  videoFrame: {
+  projectMediaColumn: {
     flexGrow: 1,
     flexBasis: 340,
-    minHeight: 260,
+    minWidth: 0
+  },
+  videoFrame: {
+    width: "100%",
+    minHeight: 220,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: colors.borderStrong,
@@ -368,9 +447,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(7, 24, 43, 0.92)"
   },
   videoFallback: {
-    flexGrow: 1,
-    flexBasis: 340,
-    minHeight: 260,
+    width: "100%",
+    minHeight: 220,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: colors.borderStrong,
@@ -392,7 +470,8 @@ const styles = StyleSheet.create({
   },
   projectCopy: {
     flexGrow: 2,
-    flexBasis: 460
+    flexBasis: 460,
+    minWidth: 0
   },
   projectTitle: {
     color: colors.text,
@@ -400,6 +479,10 @@ const styles = StyleSheet.create({
     lineHeight: 38,
     fontWeight: "900",
     marginBottom: 10
+  },
+  projectTitleCompact: {
+    fontSize: 26,
+    lineHeight: 32
   },
   bullet: {
     color: colors.textMuted,
@@ -412,16 +495,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     maxWidth: 820,
-    marginBottom: 20
+    marginBottom: 0
   },
   notesGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 14
+    gap: 14,
+    marginTop: 14
   },
   noteCard: {
     flexGrow: 1,
     flexBasis: 330,
+    minWidth: 0,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: colors.border,
