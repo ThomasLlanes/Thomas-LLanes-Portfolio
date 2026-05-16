@@ -36,7 +36,6 @@ export const profile: ProfileDto = {
     { label: "Email", url: "mailto:thomas.llanes22@gmail.com" },
     { label: "LinkedIn", url: "https://www.linkedin.com/in/thomas-llanes2202001" },
     { label: "GitHub", url: "https://github.com/your-github-placeholder", placeholder: true },
-    { label: "Resume", url: "https://your-resume-link-placeholder.com", placeholder: true }
+    { label: "Resume", url: "/Thomas_LLanes_CV.pdf", downloadFilename: "Thomas_LLanes_CV.pdf" }
   ]
 };
-

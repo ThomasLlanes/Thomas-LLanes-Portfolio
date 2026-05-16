@@ -1,6 +1,6 @@
 import React from "react";
-import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
-import { ExternalLink, Mail, MapPin } from "lucide-react-native";
+import { Linking, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { Download, ExternalLink, Mail, MapPin } from "lucide-react-native";
 import { engineeringNotes, profile, projects, type ContactLink, type NavSection } from "../content/portfolio";
 import { colors } from "../styles/theme";
 
@@ -9,14 +9,28 @@ type SectionPanelProps = {
 };
 
 function LinkButton({ link }: { link: ContactLink }) {
+  const openLink = () => {
+    if (Platform.OS === "web" && link.downloadFilename) {
+      const anchor = document.createElement("a");
+      anchor.href = link.url;
+      anchor.download = link.downloadFilename;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      return;
+    }
+
+    Linking.openURL(link.url);
+  };
+
   return (
     <Pressable
       accessibilityRole="link"
-      onPress={() => Linking.openURL(link.url)}
+      onPress={openLink}
       style={({ pressed }) => [styles.linkButton, pressed && styles.linkButtonHot]}
     >
       <Text style={styles.linkText}>{link.label}</Text>
-      {link.placeholder ? <Text style={styles.placeholder}>Placeholder</Text> : <ExternalLink size={15} color={colors.cyan} />}
+      {link.placeholder ? <Text style={styles.placeholder}>Placeholder</Text> : link.downloadFilename ? <Download size={15} color={colors.cyan} /> : <ExternalLink size={15} color={colors.cyan} />}
     </Pressable>
   );
 }
