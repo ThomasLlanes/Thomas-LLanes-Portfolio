@@ -28,8 +28,8 @@ export const projects: ProjectDto[] = [
       }
     ],
     links: [
-      { label: "GitHub", url: "https://github.com/your-github-placeholder/pokemon-ios-app", placeholder: true },
-      { label: "Hosted Video", url: "/media/PokeBrowser_Portfolio_Voiceover.mp4" }
+      { label: "GitHub", url: "https://github.com/ThomasLlanes/PokeBrowserIOSApp" },
+      { label: "Video", url: "/media/PokeBrowser_Portfolio_Voiceover.mp4" }
     ],
     featured: true
   }
