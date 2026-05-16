@@ -1,0 +1,30 @@
+{
+  "name": "@thomas-portfolio/frontend",
+  "private": true,
+  "version": "0.1.0",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "expo start --web",
+    "start": "expo start",
+    "build": "expo export --platform web",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^8.17.10",
+    "@expo/metro-runtime": "~3.2.3",
+    "expo": "^51.0.0",
+    "expo-status-bar": "~1.12.1",
+    "lucide-react-native": "^0.468.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.74.5",
+    "react-native-web": "~0.19.12",
+    "three": "^0.166.1"
+  },
+  "devDependencies": {
+    "@types/react": "~18.2.79",
+    "@types/three": "^0.166.0",
+    "typescript": "~5.3.3"
+  }
+}
